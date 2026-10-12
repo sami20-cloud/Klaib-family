@@ -83,6 +83,10 @@
   .profile-top{background:linear-gradient(135deg,rgba(201,168,76,0.15),rgba(201,168,76,0.03));border-bottom:1px solid var(--border);padding:1.8rem;display:flex;align-items:center;gap:1.2rem;}
   .profile-card.is-deceased .profile-top{background:linear-gradient(135deg,rgba(122,154,191,0.1),rgba(122,154,191,0.02));}
   .profile-avatar img{width:100%;height:100%;object-fit:cover;border-radius:50%;}
+  .photo-viewer{position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:400;display:none;align-items:center;justify-content:center;padding:1rem;cursor:zoom-out;}
+  .photo-viewer.open{display:flex;}
+  .photo-viewer img{max-width:100%;max-height:92vh;border-radius:12px;box-shadow:0 10px 50px rgba(0,0,0,.6);}
+  .photo-viewer .pv-close{position:absolute;top:14px;left:14px;width:38px;height:38px;border-radius:50%;border:1px solid var(--border);background:rgba(30,30,30,.8);color:var(--text);font-size:1.2rem;cursor:pointer;}
   .result-avatar{width:30px;height:30px;border-radius:50%;object-fit:cover;margin-left:.5rem;vertical-align:middle;border:1px solid var(--border);}
   .profile-avatar{overflow:hidden;width:68px;height:68px;border-radius:50%;background:linear-gradient(135deg,var(--gold),#8a6820);display:flex;align-items:center;justify-content:center;font-family:'Amiri',serif;font-size:1.7rem;color:var(--dark);font-weight:700;flex-shrink:0;box-shadow:0 4px 20px rgba(201,168,76,0.3);}
   .profile-card.is-deceased .profile-avatar{background:linear-gradient(135deg,#4a6a8a,#2a4a6a);box-shadow:0 4px 20px rgba(122,154,191,0.2);}
@@ -161,27 +165,27 @@
   .job-custom-wrap.show{display:block;}
 
 
-  /* FAMILY TREE (compact) */
-  .tree-card{background:var(--dark2);border:1px solid var(--border);border-radius:14px;padding:.9rem .9rem .8rem;margin-top:1rem;}
+  /* FAMILY TREE (centered) */
+  .tree-card{background:var(--dark2);border:1px solid var(--border);border-radius:14px;padding:.9rem .8rem .9rem;margin-top:1rem;}
   .tree-title{font-family:'Amiri',serif;color:var(--gold);font-size:1.1rem;margin-bottom:.3rem;text-align:center;}
-  .tree-legend{display:flex;gap:.9rem;justify-content:center;flex-wrap:wrap;font-size:.72rem;color:var(--text-muted);margin-bottom:.7rem;}
-  .tree-legend i{display:inline-block;width:9px;height:9px;border-radius:2px;margin-left:.3rem;vertical-align:middle;}
-  .gen{position:relative;display:flex;align-items:flex-start;gap:10px;padding:0 26px 10px 0;}
+  .tree-legend{display:flex;gap:.9rem;justify-content:center;flex-wrap:wrap;font-size:.72rem;color:var(--text-muted);margin-bottom:.8rem;}
+  .tree-legend i{display:inline-block;width:12px;height:12px;border-radius:3px;border:2px solid;margin-left:.3rem;vertical-align:middle;background:transparent;}
+  .tree{display:flex;flex-direction:column;align-items:center;}
+  .gen{position:relative;display:flex;flex-direction:column;align-items:center;width:100%;padding-bottom:18px;}
   .gen:last-child{padding-bottom:0;}
-  .gen::before{content:'';position:absolute;right:10px;top:0;bottom:0;border-right:2px solid #5a5a5a;}
-  .gen:first-child::before{top:16px;}
-  .gen:last-child::before{bottom:auto;height:16px;}
-  .gen::after{content:'';position:absolute;right:10px;top:16px;width:16px;border-top:2px solid #5a5a5a;}
-  .sibs{display:flex;flex-wrap:wrap;gap:5px;flex:1;min-width:0;align-items:center;padding-top:3px;}
-  .sibs-label{font-size:.7rem;color:var(--text-muted);}
-  .tnode{display:inline-block;flex-shrink:0;padding:.3rem .8rem;border-radius:7px;border:2px solid;background:var(--dark3);color:var(--text);font-size:.88rem;font-weight:600;white-space:nowrap;}
-  .tnode.sib{font-size:.76rem;font-weight:400;padding:.12rem .55rem;border-width:1.5px;opacity:.9;}
-  .tnode.alive{border-color:#2ecc71;background:rgba(46,204,113,.12);}
-  .tnode.dead{border-color:#e74c3c;background:rgba(231,76,60,.12);}
+  .gen:not(:last-child)::after{content:'';position:absolute;bottom:0;left:50%;height:18px;border-left:2px solid #5a5a5a;}
+  .sibs-box{margin-top:12px;width:100%;max-width:460px;padding:.5rem .6rem .65rem;border:1px dashed rgba(201,168,76,.28);border-radius:10px;}
+  .sibs-title{font-size:.72rem;color:var(--text-muted);text-align:center;margin-bottom:.5rem;}
+  .sibs-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px;}
+  .tnode{display:inline-block;padding:.3rem .9rem;border-radius:8px;border:2px solid;background:var(--dark3);color:var(--text);font-size:.9rem;font-weight:600;white-space:nowrap;}
+  .tnode.sib{display:block;text-align:center;font-size:.76rem;font-weight:400;padding:.25rem .2rem;border-width:1.5px;overflow:hidden;text-overflow:ellipsis;}
+  .tnode.alive{border-color:#2ecc71;}
+  .tnode.dead{border-color:#e74c3c;}
   .tnode.unknown{border-color:#6b6b6b;border-style:dashed;color:var(--text-muted);}
   .tnode.self{box-shadow:0 0 0 3px rgba(232,201,106,.7);color:var(--gold-light);}
   .tnode.clickable{cursor:pointer;}
-  .tnode.clickable:hover{filter:brightness(1.3);}
+  .tnode.clickable:hover{background:rgba(255,255,255,.07);}
+  @media(max-width:480px){.tnode.sib{font-size:.66rem;padding:.25rem .1rem;}}
 
   @keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 </style>
@@ -192,6 +196,12 @@
 <div class="loading-overlay" id="loading">
   <div class="spinner"></div>
   <div class="loading-text" id="loading-text">جاري التحميل...</div>
+</div>
+
+<!-- PHOTO VIEWER -->
+<div class="photo-viewer" id="photo-viewer" onclick="closePhoto()">
+  <button class="pv-close" onclick="closePhoto()" aria-label="إغلاق">✕</button>
+  <img id="pv-img" alt="" referrerpolicy="no-referrer" onerror="photoViewerNext()">
 </div>
 
 <!-- TOAST -->
@@ -491,7 +501,7 @@ var html = '';
  for (var i = 0; i < results.length; i++) { var p = results[i]; var isDec = p.deceased ? ' is-deceased' : ''; var badge = p.deceased ? deceasedBadge() : ''; var fullN = p.fullName ? '<div style="font-size:0.85em; color:#aaa;">' + p.fullName + '</div>' : ''; var dobFormatted = (p.dob || '').split('T')[0];
 html += '<div class="result-card' + isDec + '" onclick="showProfile(' + p.id + ')">';
 
-var av = photoSrc(p.photo) ? '<img class="result-avatar" src="' + esc2(photoSrc(p.photo)) + '" alt="" referrerpolicy="no-referrer" onerror="this.remove()">' : '';
+var av = photoSrc(p.photo) ? '<img class="result-avatar" src="' + esc2(photoSrc(p.photo)) + '" data-c="' + esc2(JSON.stringify(photoCandidates(p.photo))) + '" alt="" referrerpolicy="no-referrer" onerror="photoNext(this)">' : '';
 html += '<div class="result-name">' + av + p.name + badge + '</div>';
 html += fullN;
 html += '<div class="result-meta">';
@@ -510,7 +520,7 @@ function showProfile(id){
   document.getElementById('profile-content').innerHTML=`
     <div class="profile-card${p.deceased?' is-deceased':''}">
       <div class="profile-top">
-        <div class="profile-avatar">${photoSrc(p.photo)?`<img src="${esc2(photoSrc(p.photo))}" alt="" referrerpolicy="no-referrer" onerror="this.replaceWith(document.createTextNode('${esc2(p.name.charAt(0))}'))">`:p.name.charAt(0)}</div>
+        <div class="profile-avatar"${photoSrc(p.photo)?` style="cursor:zoom-in" onclick="openPhoto(${p.id})" title="اضغط للتكبير"`:''}>${photoSrc(p.photo)?`<img src="${esc2(photoSrc(p.photo))}" data-c="${esc2(JSON.stringify(photoCandidates(p.photo)))}" alt="" referrerpolicy="no-referrer" onerror="photoNext(this,'${esc2(p.name.charAt(0))}')">`:p.name.charAt(0)}</div>
         <div class="profile-name-area">
           <h1>${p.fullName} ${p.deceased?deceasedBadge():''}</h1>
           <p>عائلة كليب</p>
@@ -674,12 +684,43 @@ function fmtDate(v){
 
 // ===== PHOTOS =====
 // يقبل رابط صورة مباشر، أو رابط Google Drive (مشاركة: أي شخص لديه الرابط)
-function photoSrc(u){
-  u=String(u||'').trim(); if(!u) return '';
-  const m=u.match(/drive\.google\.com\/(?:file\/d\/|open\?id=|uc\?(?:export=\w+&)?id=|thumbnail\?id=)([\w-]+)/);
-  return m ? 'https://drive.google.com/thumbnail?id='+m[1]+'&sz=w500' : u;
+function photoCandidates(u,w){
+  w=w||500;
+  u=String(u||'').trim(); if(!u) return [];
+  const m=u.match(/(?:\/d\/|[?&]id=)([\w-]{15,})/);
+  if(m && /drive\.google|drive\.usercontent|googleusercontent|docs\.google/.test(u)){
+    const id=m[1];
+    return ['https://lh3.googleusercontent.com/d/'+id+'=w'+w,
+            'https://drive.google.com/thumbnail?id='+id+'&sz=w'+w,
+            'https://drive.google.com/uc?export=view&id='+id];
+  }
+  return [u];
+}
+function photoSrc(u){ return photoCandidates(u)[0]||''; }
+// عند فشل الرابط نجرّب البديل التالي، وفي النهاية نرجع للحرف الأول
+function photoNext(img,letter){
+  let c=[]; try{ c=JSON.parse(img.dataset.c||'[]'); }catch(e){}
+  const i=(+img.dataset.i||0)+1;
+  if(i<c.length){ img.dataset.i=i; img.src=c[i]; }
+  else if(letter){ img.replaceWith(document.createTextNode(letter)); }
+  else img.remove();
 }
 function esc2(t){ return String(t==null?'':t).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+function openPhoto(id){
+  const p=familyData.find(x=>String(x.id)===String(id)); if(!p) return;
+  const c=photoCandidates(p.photo,1600); if(!c.length) return;
+  const img=document.getElementById('pv-img');
+  img.dataset.c=JSON.stringify(c); img.dataset.i=0; img.src=c[0];
+  document.getElementById('photo-viewer').classList.add('open');
+}
+function photoViewerNext(){
+  const img=document.getElementById('pv-img'); let c=[]; try{c=JSON.parse(img.dataset.c||'[]');}catch(e){}
+  const i=(+img.dataset.i||0)+1;
+  if(i<c.length){ img.dataset.i=i; img.src=c[i]; } else closePhoto();
+}
+function closePhoto(){ document.getElementById('photo-viewer').classList.remove('open'); document.getElementById('pv-img').removeAttribute('src'); }
+document.addEventListener('keydown',e=>{ if(e.key==='Escape') closePhoto(); });
 
 // ===== TREE HELPERS =====
 function isTrue(v){
@@ -759,10 +800,10 @@ function renderTreeHtml(person){
       sibs.sort((a,b)=>String(a.dob||'').localeCompare(String(b.dob||'')));
     }
     rows+='<div class="gen">'+chip(n,'main')
-      +(sibs.length?'<div class="sibs"><span class="sibs-label">إخوته:</span>'+sibs.map(x=>chip(x,'sib')).join('')+'</div>':'')+'</div>';
+      +(sibs.length?'<div class="sibs-box"><div class="sibs-title">إخوته ('+sibs.length+')</div><div class="sibs-grid">'+sibs.map(x=>chip(x,'sib')).join('')+'</div></div>':'')+'</div>';
   }
   return '<div class="tree-card"><div class="tree-title">🌳 شجرة النسب</div>'
-    +'<div class="tree-legend"><span><i style="background:#2ecc71"></i>حي</span><span><i style="background:#e74c3c"></i>متوفى</span><span><i style="background:#6b6b6b"></i>غير مسجّل</span></div>'
+    +'<div class="tree-legend"><span><i style="border-color:#2ecc71"></i>حي</span><span><i style="border-color:#e74c3c"></i>متوفى</span><span><i style="border-color:#6b6b6b;border-style:dashed"></i>غير مسجّل</span></div>'
     +'<div class="tree">'+rows+'</div></div>';
 }
 </script>
